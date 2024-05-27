@@ -1,13 +1,8 @@
 <?php
-// session_start();
-if (!isset($_SESSION['IS_LOGIN'])) {
-    header('location:/index.php');
+if (!isset($_SESSION['IS_LOGIN']) && $_SESSION(['IS_LOGIN'] !== 'yes')) {
+    header('location:login');
     die();
 }
-// } elseif (isset($_SESSION['IS_LOGIN'])) {
-//     header('location:header.php');
-//     die();
-// }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -41,29 +36,29 @@ if (!isset($_SESSION['IS_LOGIN'])) {
         <ul class="sidebar navbar-nav">
             <?php if ($_SESSION['ROLE'] == 1) { ?>
                 <li class="nav-item">
-                    <a class="nav-link" href="dashboard">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <a class="nav-link" href="admin_dashboard">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="project">
-                    <i class="fa fa-fw fa-columns"></i>
+                        <i class="fa fa-fw fa-columns"></i>
                         <span>Manage Project</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="users">
-                    <i class="fa fa-fw fa-user"></i>
+                        <i class="fa fa-fw fa-user"></i>
                         <span>Manage Users</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="team">
-                    <i class="fa fa-fw fa-users"></i>
+                        <i class="fa fa-fw fa-users"></i>
                         <span>Manage Team</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="task">
-                    <i class="fas fa-fw fa-check-circle"></i>
+                        <i class="fas fa-fw fa-check-circle"></i>
                         <span>Manage Task</span></a>
                 </li>
             <?php } elseif ($_SESSION['ROLE'] == 2) { ?>

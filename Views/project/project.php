@@ -1,6 +1,15 @@
-<!-- app/Views/projects.php -->
 <?php include ('Views/header.php'); ?>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Projects</title>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin.css" rel="stylesheet">
+</head>
+<body>
 <div class="container-fluid">
     <!-- DataTables Example -->
     <div class="card mb-3">
@@ -51,12 +60,10 @@
                                     }
                                     ?>
                                 </td>
-                              
+
                                 <td>
-                                    <a href='manage_project?id=<?php echo $row['id']; ?>' class='btn btn-info btn-sm'
-                                        onclick='return confirmEdit()'>Edit</a>
-                                    <a href='?type=delete&id=<?php echo $row['id']; ?>' class='btn btn-danger btn-sm'
-                                        onclick='return confirmDelete()'>Delete</a>
+                                    <a href='manage_project?id=<?php echo $row['id']; ?>' class='btn btn-info btn-sm'>Edit</a>
+                                    <a href='?type=delete&id=<?php echo $row['id']; ?>' class='btn btn-danger btn-sm' onclick='return confirmDelete()'>Delete</a>
                                 </td>
                             </tr>
                         <?php } ?>
@@ -67,15 +74,25 @@
     </div>
 </div>
 <!-- /.container-fluid -->
-<!-- JavaScript for confirmation prompts -->
+<!-- Bootstrap core JavaScript-->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables JavaScript -->
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
 <script>
-    function confirmEdit() {
-        return confirm('Are you sure you want to edit this project?');
-    }
+    $(document).ready(function() {
+        $('#dataTable').DataTable({
+            "pagingType": "full_numbers",
+            "pageLength": 10,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true
+        });
+    });
 
     function confirmDelete() {
         return confirm('Are you sure you want to delete this project? This action cannot be undone.');
     }
 </script>
-
 <?php include ('Views/footer.php'); ?>

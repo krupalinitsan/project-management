@@ -120,6 +120,10 @@ if (isset($_SERVER['PATH_INFO'])) {
             $teamController = new TeamController($connection);
             $teamController->addTeam();
             break;
+        case '/admin_dashboard';
+            $projectController = new ProjectController($connection);
+            $projectController->fetchProject();
+            break;
         default:
             // Handle 404 error
             echo "404 Not Found";

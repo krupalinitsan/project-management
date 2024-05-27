@@ -19,28 +19,33 @@ include ("Views/header.php");
     <div class="container">
         <div class="card card-login mx-auto mt-5">
             <div class="card-header">Add Task</div>
+            <div class="text-center text-success">
+                <?php if ($msg): ?>
+                    <div class="alert alert-danger mt-3" role="alert">
+                        <?php echo $msg; ?>
+                    </div>
+                <?php endif; ?>
+            </div>
             <div class="card-body">
-                <div class="alert" color="red">
-                    <?php echo $msg; ?>
-                </div>
                 <form id="registrationForm" method="post" action="" name="projectForm" onsubmit="return validateForm()">
                     <div class="row mb-3">
                         <div class="col">
-                            <label for="pname" class="form-label">Name</label>
+                            <label for="pname" class="form-label">Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="pname" name="pname" required>
                         </div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col">
-                            <label for="desc" class="form-label">Description</label>
+                            <label for="desc" class="form-label">Description <span class="text-danger">*</span></label>
                             <textarea class="form-control" id="desc" name="desc" required></textarea>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col">
-                            <label for="employee" class="form-label">Employee</label>
+                            <label for="employee" class="form-label">Employee <span class="text-danger">*</span></label>
                             <select id="employee" name="employee" class="form-control" required>
                                 <?php
-                                $result = $tasks->getAllUser();
-
+                                $result = $tasks->fetchAllRecords('users');
                                 while ($row = $result->fetch_assoc()) {
                                     $selected = ($task_data['employee_id'] == $row['id']) ? 'selected' : '';
                                     echo "<option value='" . $row['id'] . "' $selected>" . $row['firstname'] . "</option>";
@@ -49,11 +54,10 @@ include ("Views/header.php");
                             </select>
                         </div>
                         <div class="col">
-                            <label for="project" class="form-label">Project</label>
+                            <label for="project" class="form-label">Project <span class="text-danger">*</span></label>
                             <select id="project" name="project" class="form-control" required>
                                 <?php
-                                $result = $tasks->getAllProject();
-
+                                $result = $tasks->fetchAllRecords('projects');
                                 while ($row = $result->fetch_assoc()) {
                                     $selected = ($task_data['project_id'] == $row['id']) ? 'selected' : '';
                                     echo "<option value='" . $row['id'] . "' $selected>" . $row['name'] . "</option>";
@@ -64,22 +68,21 @@ include ("Views/header.php");
                     </div>
                     <div class="row mb-3">
                         <div class="col">
-                            <label for="ddate" class="form-label">Deadline</label>
-                            <input type="date" class="form-control" id="ddate" name="ddate" required>
-                        </div>
-                        <div class="col">
-                            <label for="sdate" class="form-label">Start Date</label>
+                            <label for="sdate" class="form-label">Start Date <span class="text-danger">*</span></label>
                             <input type="date" class="form-control" id="sdate" name="sdate" required>
                         </div>
                         <div class="col">
-                            <label for="edate" class="form-label">End Date</label>
+                            <label for="edate" class="form-label">End Date <span class="text-danger">*</span></label>
                             <input type="date" class="form-control" id="edate" name="edate" required>
                         </div>
+                        <div class="col">
+                            <label for="ddate" class="form-label">Deadline <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="ddate" name="ddate" required>
+                        </div>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3 text-center">
                         <input type="submit" name="add" id="regist" value="ADD TASK" class="btn btn-primary">
                     </div>
-
                 </form>
             </div>
         </div>
@@ -89,15 +92,15 @@ include ("Views/header.php");
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
         function validateForm() {
-            const sdate = document.getElementById('sdate').value;
-            const edate = document.getElementById('edate').value;
-            const ddate = document.getElementById('ddate').value;
+            const sdate = new Date(document.getElementById('sdate').value);
+            const edate = new Date(document.getElementById('edate').value);
+            const ddate = new Date(document.getElementById('ddate').value);
 
-            if (new Date(sdate) >= new Date(edate)) {
+            if (sdate >= edate) {
                 alert('Start date cannot be after end date or same.');
                 return false;
             }
-            if (new Date(edate) > new Date(ddate) && new Date(ddate) > Date(sdate)) {
+            if (edate > ddate) {
                 alert('End date cannot be after deadline.');
                 return false;
             }

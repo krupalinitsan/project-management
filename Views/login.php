@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,14 +24,14 @@
                 <form method="post" name="loginform" onsubmit="return validateForm()">
                     <div class="form-group">
                         <div class="form-label-group">
-                            <input type="email" name="email" class="form-control" placeholder="Email"
+                            <input type="email" name="email" class="form-control" placeholder="Email *"
                                 required="required" autofocus="autofocus" id="email">
                             <label for="email">Email</label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="form-label-group">
-                            <input type="password" name="password" class="form-control" placeholder="Password"
+                            <input type="password" name="password" class="form-control" placeholder="Password *"
                                 required="required" id="password">
                             <label for="password">Password</label>
                         </div>

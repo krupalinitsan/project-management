@@ -65,8 +65,7 @@
                                 </td>
 
                                 <td>
-                                    <a href='manage_task?id=<?php echo $row['id']; ?>' class='btn btn-info btn-sm'
-                                        onclick='return confirmEdit()'>Edit</a>
+                                    <a href='manage_task?id=<?php echo $row['id']; ?>' class='btn btn-info btn-sm'>Edit</a>
                                     <a href='?type=delete&id=<?php echo $row['id']; ?>' class='btn btn-danger btn-sm'
                                         onclick='return confirmDelete()'>Delete</a>
                                 </td>
@@ -80,9 +79,6 @@
 </div>
 
 <script>
-    function confirmEdit() {
-        return confirm('Are you sure you want to edit this task?');
-    }
     function confirmDelete() {
         return confirm('Are you sure you want to delete this task? This action cannot be undone.');
     }

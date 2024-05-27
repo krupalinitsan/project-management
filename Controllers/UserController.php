@@ -2,113 +2,81 @@
 // app/Controllers/UserController.php
 
 require_once 'Models/Employee.php';
+require_once 'Models/Common.php';
 
 class UserController
 {
     private $employeeModel;
+    private $commonModel;
 
     public function __construct($connection)
     {
         $this->employeeModel = new Employee($connection);
+        $this->commonModel = new Common($connection);
     }
 
-    //method for display user
+    // Method to display user
     public function handleUserRequest()
     {
-        // session_start();
-
         if (isset($_GET['type'])) {
             $type = $_GET['type'];
 
             if ($type == 'status' && isset($_GET['operation'], $_GET['id'])) {
                 $status = ($_GET['operation'] == 'active') ? 1 : 0;
                 $id = $_GET['id'];
-                $this->employeeModel->updateStatus($id, $status);
+                $this->commonModel->updateStatus($id, $status, 'users');
             }
 
             if ($type == 'delete' && isset($_GET['id'])) {
                 $id = $_GET['id'];
                 $role = $_SESSION['ROLE'];
                 $hardDelete = ($role == 1);
-                $this->employeeModel->deleteEmployee($id, $hardDelete);
-                $_SESSION['message'] = $hardDelete ? "user hard deleted successfully!" : "user soft deleted successfully!";
+                $this->commonModel->deleteRecord($id, 'users', $hardDelete);
+                $_SESSION['message'] = $hardDelete ? "User hard deleted successfully!" : "User soft deleted successfully!";
                 header("Location: users");
                 exit();
             }
         }
-        // $role = $this->employeeModel->getRoleById($row['role']);
-        $employees = $this->employeeModel->getAllEmployees();
+        $employees = $this->commonModel->fetchAllRecords('users');
         $employeeModel = $this->employeeModel;
         include_once 'Views/user/users.php';
-
     }
 
-    // methods for add user
-
+    // Method to add user
     public function addUser()
     {
-
-        $msg = "";
-
+        $msg = '';
         if (isset($_POST['add'])) {
+            list($fname, $mname, $lname, $email, $role, $team, $msg) = $this->validateAndGetUserData();
 
-            // Fetch $_POST values
-            $fname = trim($_POST['fname']);
-            $mname = trim($_POST['mname']);
-            $lname = trim($_POST['lname']);
-            // $password = trim($_POST['password']);
-            $email = trim($_POST['email']);
-            $role = $_POST['role'];
-            $team = $_POST['team'];
-
-            // Validate inputs
-            if (empty($fname) || empty($mname) || empty($lname) || empty($email) || empty($role) || empty($team)) {
-                $msg = "Please enter all required details.";
-            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $msg = "Please enter a valid email address.";
-            } else {
+            if (empty($msg)) {
                 // Insertion query
-
                 $data = $this->employeeModel->addUser($fname, $mname, $lname, $email, $role, $team);
 
                 if ($data) {
                     echo '<script>alert("Data inserted successfully."); 
                     window.location.replace("users");</script>';
                     exit();
-                    // $msg = "Data inserted successfully.";
                 } else {
-                    $msg = "Error inserting data. Please try again.";
+                    $msg = "Please enter another email. It already exists.";
                 }
             }
         }
 
-        $roles = $this->employeeModel->getRoles();
-        $teams = $this->employeeModel->getTeam();
+        list($roles, $teams) = $this->fetchRolesAndTeams();
         $employeeModel = $this->employeeModel;
         include_once 'Views/user/add_user.php';
-
     }
 
-    //methods for edit user
-
+    // Method to edit user
     public function editUser($id)
     {
-        $msg = "";
-
-        $user = $this->employeeModel->getUsertById($id);
+        $user = $this->employeeModel->getUserById($id);
         if (isset($_POST['update'])) {
-            // Validate and sanitize user input
-            $fname = $_POST['fname'];
-            $mname = $_POST['mname'];
-            $lname = $_POST['lname'];
-            // $password = $_POST['password'];
-            $email = $_POST['email'];
-            $role = intval($_POST['role']);
-            $team = intval($_POST['team']);
+            list($fname, $mname, $lname, $email, $role, $team, $msg) = $this->validateAndGetUserData();
 
-            // Check if all fields are filled
-            if (!empty($fname) && !empty($lname) && !empty($email) && !empty($role) && !empty($team)) {
-
+            if (empty($msg)) {
+                // Update query
                 $data = $this->employeeModel->updateUser($id, $fname, $mname, $lname, $email, $role, $team);
 
                 if ($data) {
@@ -118,15 +86,42 @@ class UserController
                 } else {
                     $msg = "Failed to update user. Please try again.";
                 }
-            } else {
-                $msg = "Please fill in all fields.";
             }
         }
 
-        $roles = $this->employeeModel->getRoles();
-        $teams = $this->employeeModel->getTeam();
+        list($roles, $teams) = $this->fetchRolesAndTeams();
         $employeeModel = $this->employeeModel;
         include_once 'Views/user/manage_user.php';
+    }
+
+    // Private method to fetch roles and teams
+    private function fetchRolesAndTeams()
+    {
+        $roles = $this->commonModel->fetchAllRecords("roles");
+        $teams = $this->commonModel->fetchAllRecords("teams");
+        return [$roles, $teams];
+    }
+
+    // Private method to validate user data and get values
+    private function validateAndGetUserData()
+    {
+        $fname = trim($_POST['fname']);
+        $mname = trim($_POST['mname']);
+        $lname = trim($_POST['lname']);
+        $email = trim($_POST['email']);
+        $role = $_POST['role'];
+        $team = $_POST['team'];
+
+        $msg = '';
+
+        // Validate inputs
+        if (empty($fname) || empty($mname) || empty($lname) || empty($email) || empty($role) || empty($team)) {
+            $msg = "Please enter all required details.";
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $msg = "Please enter a valid email address.";
+        }
+
+        return [$fname, $mname, $lname, $email, $role, $team, $msg];
     }
 }
 ?>

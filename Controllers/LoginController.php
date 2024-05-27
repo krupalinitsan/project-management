@@ -13,9 +13,7 @@ class LoginController
 
     public function login()
     {
-       
         $error = '';
-
         if (isset($_POST['submit'])) {
             $email = $_POST['email'];
             $password = $_POST['password'];
@@ -28,8 +26,9 @@ class LoginController
                 if ($user) {
                     session_start();
                     $_SESSION['ROLE'] = $user['role'];
-                    $_SESSION['IS_LOGIN'] = 'yes';
                     $_SESSION['ID'] = $user['id'];
+                    $_SESSION['IS_LOGIN'] = 'yes';
+
                     header("Location: dashboard");
                     exit();
                 } else {
@@ -44,7 +43,6 @@ class LoginController
     public function register()
     {
         $error = '';
-
         if (isset($_POST['regist'])) {
             $fname = $_POST['fname'];
             $mname = $_POST['mname'];
@@ -57,7 +55,7 @@ class LoginController
                 window.location.replace("login");</script>';
                 exit();
             } else {
-                $error = "Registration failed. Please try again.";
+                $error = "please enter another email. it is already exists.";
             }
         }
 
@@ -65,9 +63,7 @@ class LoginController
     }
     public function resetPassword()
     {
-
         $msg = '';
-
         if (isset($_POST['cpassword'])) {
             $email = $_POST['email'];
             $newPassword = $_POST['newpassword'];

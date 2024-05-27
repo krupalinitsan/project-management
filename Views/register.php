@@ -14,42 +14,46 @@
 
 <body class="bg-white">
     <div class="container">
-        <div class="card card-login mx-auto mt150">
+        <div class="card card-login mx-auto mt-5">
             <div class="card-header">Add User</div>
+            <?php if ($error): ?>
+                <div class="alert alert-danger mt-3" role="alert">
+                    <?php echo $error; ?>
+                </div>
+            <?php endif; ?>
             <div class="card-body">
                 <form id="registrationForm" method="post" action="" name="employeeForm"
                     onsubmit="return validateForm()">
                     <div class="row mb-3">
                         <div class="col">
-                            <label for="fname" class="form-label">First Name</label>
+                            <label for="fname" class="form-label">First Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="fname" name="fname" required>
                             <span class="error text-danger" id="fnameError"></span>
                         </div>
                         <div class="col">
-                            <label for="mname" class="form-label">Middle Name</label>
+                            <label for="mname" class="form-label">Middle Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="mname" name="mname" required>
                             <span class="error text-danger" id="mnameError"></span>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col">
-                            <label for="lname" class="form-label">Last Name</label>
+                            <label for="lname" class="form-label">Last Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="lname" name="lname" required>
                             <span class="error text-danger" id="lnameError"></span>
                         </div>
                         <div class="col">
-                            <label for="password" class="form-label">Password</label>
+                            <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
                             <input type="password" class="form-control" id="password" name="password" required>
                             <span class="error text-danger" id="passwordError"></span>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col">
-                            <label for="email" class="form-label">Email</label>
+                            <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
                             <input type="email" class="form-control" id="email" name="email" required>
                             <span class="error text-danger" id="emailError"></span>
                         </div>
-
                     </div>
                     <div class="mb-3" align="center">
                         <input type="submit" name="regist" id="regist" value="Register" class="btn btn-primary">

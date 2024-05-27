@@ -2,14 +2,17 @@
 // app/Controllers/UserController.php
 
 require_once 'Models/Task.php';
+require_once 'Models/Common.php';
 
 class TaskController
 {
     private $taskModel;
+    private $commonModel;
 
     public function __construct($connection)
     {
         $this->taskModel = new Task($connection);
+        $this->commonModel = new Common($connection);
     }
     // usertask method 
     public function updateStatus()
@@ -18,7 +21,7 @@ class TaskController
             $operation = $_GET['operation'];
             $id = $_GET['id'];
             $status = ($operation === 'active') ? '1' : '0';
-            $this->taskModel->updateTaskStatus($id, $status);
+            $this->commonModel->updateStatus($id, $status, 'tasks');
         }
         $tasks = $this->taskModel->getTasksByEmployeeId();
         include 'Views/user-task/usertask.php';
@@ -37,7 +40,6 @@ class TaskController
         }
 
         $project_id = isset($task['project_id']) ? $task['project_id'] : null;
-
         if ($project_id) {
             $project_result = $this->taskModel->getDataFromProject($project_id);
         } else {
@@ -49,7 +51,7 @@ class TaskController
         if ($id && isset($_POST['sstatus'])) {
             $status = $_POST['status'];
 
-            $data = $this->taskModel->updateTaskStatus($id, $status);
+            $data = $this->commonModel->updateStatus($id, $status, 'tasks');
 
             if ($data) {
                 echo '<script>alert("Status updated successfully."); window.location.replace("usercalander");</script>';
@@ -65,7 +67,6 @@ class TaskController
 
     // admin task method
 
-
     //fetch data
     public function handleTaskRequest()
     {
@@ -79,7 +80,7 @@ class TaskController
                 } else {
                     $status = '0';
                 }
-                $this->taskModel->updateTaskStatus($id, $status);
+                $this->commonModel->updateStatus($id, $status, 'tasks');
             }
 
             if ($type == 'delete') {
@@ -87,19 +88,22 @@ class TaskController
                 $role = $_SESSION['ROLE'];
                 // Check if the role is admin 
                 if ($role == 1) {
-                    $data = $this->taskModel->deleteTask($id);
+
+                    $data = $this->commonModel->hardDelete($id, 'tasks');
                     if ($data) {
                         $_SESSION['message'] = "Task hard deleted successfully!";
                     }
                 } else {
                     // Hard delete query to remove the task from the database
-                    $data = $this->taskModel->deleteUserTask($id);
+                    $data = $this->commonModel->softDelete($id, 'tasks');
+
                     if ($data) {
                         $_SESSION['message'] = "Task soft deleted successfully!";
                     }
 
                 }
-                header("Location: project.php"); // Redirect to the users page
+
+                header("Location: task"); // Redirect to the users page
                 exit();
 
             }
@@ -116,16 +120,6 @@ class TaskController
     public function editTask($id)
     {
         $msg = "";
-        $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-
-        if ($id > 0) {
-            // Fetch the current task data
-            $task_data = $this->taskModel->getCurrentTask($id);
-
-        } else {
-            echo "Invalid task ID";
-            exit;
-        }
 
         // Handle form submission to update task data
         if (isset($_POST['update'])) {
@@ -156,6 +150,7 @@ class TaskController
                 $msg = "Please fill in all fields.";
             }
         }
+        $task_data = $this->commonModel->getRecordById($id, 'tasks');
         $tasks = $this->taskModel;
         include_once 'Views/task/manage_task.php';
     }
@@ -200,7 +195,7 @@ class TaskController
                 }
             }
         }
-        $tasks = $this->taskModel;
+        $tasks = $this->commonModel;
         include_once 'Views/task/add_task.php';
     }
 

@@ -1,5 +1,5 @@
 <?php
-include ('Views/header.php');
+include('Views/header.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,12 +25,11 @@ include ('Views/header.php');
                     <div class="row mb-3">
                         <div class="col">
                             <label for="pname" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="pname" name="pname" required>
+                            <input type="text" class="form-control" id="pname" name="pname" value="<?php echo htmlspecialchars($task_data['name']); ?>" required>
                         </div>
                         <div class="col">
                             <label for="desc" class="form-label">Description</label>
-                            <textarea class="form-control" id="desc" name="desc"
-                                value="<?php echo $task_data['description']; ?>" required></textarea>
+                            <textarea class="form-control" id="desc" name="desc" required><?php echo htmlspecialchars($task_data['description']); ?></textarea>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -38,13 +37,11 @@ include ('Views/header.php');
                             <label for="employee" class="form-label">Employee</label>
                             <select id="employee" name="employee" class="form-control">
                                 <?php
-                                $result = $tasks->getAllUser();
-
+                                $result = $tasks->fetchAllRecords('users');
                                 while ($row = $result->fetch_assoc()) {
                                     $selected = ($task_data['employee_id'] == $row['id']) ? 'selected' : '';
-                                    echo "<option value='" . $row['id'] . "' $selected>" . $row['firstname'] . "</option>";
+                                    echo "<option value='" . $row['id'] . "' $selected>" . htmlspecialchars($row['firstname']) . "</option>";
                                 }
-
                                 ?>
                             </select>
                         </div>
@@ -52,14 +49,11 @@ include ('Views/header.php');
                             <label for="project" class="form-label">Project</label>
                             <select id="project" name="project" class="form-control" required>
                                 <?php
-
-                                $result = $tasks->getAllProject();
-
+                                $result = $tasks->fetchAllRecords('projects');
                                 while ($row = $result->fetch_assoc()) {
                                     $selected = ($task_data['project_id'] == $row['id']) ? 'selected' : '';
-                                    echo "<option value='" . $row['id'] . "' $selected>" . $row['name'] . "</option>";
+                                    echo "<option value='" . $row['id'] . "' $selected>" . htmlspecialchars($row['name']) . "</option>";
                                 }
-
                                 ?>
                             </select>
                         </div>
@@ -67,18 +61,15 @@ include ('Views/header.php');
                     <div class="row mb-3">
                         <div class="col">
                             <label for="ddate" class="form-label">Deadline</label>
-                            <input type="date" class="form-control" id="ddate" name="ddate"
-                                value="<?php echo htmlspecialchars($task_data['deadline']); ?>" required>
+                            <input type="date" class="form-control" id="ddate" name="ddate" value="<?php echo htmlspecialchars($task_data['deadline']); ?>" required>
                         </div>
                         <div class="col">
                             <label for="sdate" class="form-label">Start Date</label>
-                            <input type="date" class="form-control" id="sdate" name="sdate"
-                                value="<?php echo htmlspecialchars($task_data['start_date']); ?>" required>
+                            <input type="date" class="form-control" id="sdate" name="sdate" value="<?php echo htmlspecialchars($task_data['start_date']); ?>" required>
                         </div>
                         <div class="col">
                             <label for="edate" class="form-label">End Date</label>
-                            <input type="date" class="form-control" id="edate" name="edate"
-                                value="<?php echo htmlspecialchars($task_data['end_date']); ?>" required>
+                            <input type="date" class="form-control" id="edate" name="edate" value="<?php echo htmlspecialchars($task_data['end_date']); ?>" required>
                         </div>
                     </div>
                     <div class="mb-3">
@@ -99,10 +90,10 @@ include ('Views/header.php');
             const ddate = document.getElementById('ddate').value;
 
             if (new Date(sdate) >= new Date(edate)) {
-                alert('Start date cannot be after end date or same.');
+                alert('Start date cannot be after end date or the same.');
                 return false;
             }
-            if (new Date(edate) > new Date(ddate) && new Date(ddate) > Date(sdate)) {
+            if (new Date(edate) > new Date(ddate)) {
                 alert('End date cannot be after deadline.');
                 return false;
             }
@@ -112,5 +103,5 @@ include ('Views/header.php');
 </body>
 
 </html>
-y
-<?php include ('Views/footer.php'); ?>
+
+<?php include('Views/footer.php'); ?>

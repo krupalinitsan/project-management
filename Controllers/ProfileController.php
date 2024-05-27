@@ -6,17 +6,17 @@ require_once 'Models/Profile.php';
 class ProfileController
 {
     private $profileModel;
-
+    private $employeeModel;
     public function __construct($connection)
     {
         $this->profileModel = new Profile($connection);
+
+        $this->employeeModel = new Employee($connection);
     }
 
     public function handleProfile($id)
     {
-        // session_start();
-        $msg = "";
-
+        $msg = '';
         if (isset($_POST['update'])) {
             // Validate and sanitize user input
             $fname = $_POST['fname'];
@@ -40,8 +40,9 @@ class ProfileController
             }
         }
 
-        $user = $this->profileModel->getUserById($id);
+        $user = $this->employeeModel->getUserById($id);
         include 'Views/profile/profile.php';
     }
+
 }
 ?>

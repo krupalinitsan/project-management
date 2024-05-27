@@ -1,13 +1,8 @@
 <?php
 // app/Models/User.php
-class User
+require_once 'Models/Common.php';
+class User extends Common
 {
-	private $connection;
-
-	public function __construct($connection)
-	{
-		$this->connection = $connection;
-	}
 	// login user
 	public function getUserByEmailAndPassword($email, $password)
 	{
@@ -19,6 +14,7 @@ class User
 
 		return $result->fetch_assoc();
 	}
+
 	// register user
 	public function registerUser($fname, $mname, $lname, $email, $password)
 	{
@@ -50,5 +46,6 @@ class User
 
 		return $result->num_rows > 0;
 	}
+
 }
 ?>

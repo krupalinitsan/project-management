@@ -26,27 +26,29 @@ include ("Views/header.php");
                 <form id="registrationForm" method="post" action="" name="projectForm" onsubmit="return validateForm()">
                     <div class="row mb-3">
                         <div class="col">
-                            <label for="pname" class="form-label">Name</label>
+                            <label for="pname" class="form-label">Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="pname" name="pname" required>
                         </div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col">
-                            <label for="desc" class="form-label">Description</label>
+                            <label for="desc" class="form-label">Description <span class="text-danger">*</span></label>
                             <textarea class="form-control" id="desc" name="desc" required></textarea>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col">
-                            <label for="sdate" class="form-label">Start Date</label>
+                            <label for="sdate" class="form-label">Start Date <span class="text-danger">*</span></label>
                             <input type="date" class="form-control" id="sdate" name="sdate" required>
                         </div>
                         <div class="col">
-                            <label for="edate" class="form-label">End Date</label>
+                            <label for="edate" class="form-label">End Date <span class="text-danger">*</span></label>
                             <input type="date" class="form-control" id="edate" name="edate" required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col">
-                            <label for="ddate" class="form-label">Deadline</label>
+                            <label for="ddate" class="form-label">Deadline <span class="text-danger">*</span></label>
                             <input type="date" class="form-control" id="ddate" name="ddate" required>
                         </div>
                     </div>

@@ -25,7 +25,7 @@ include ("Views/header.php");
                     <div class="row mb-3">
                         <div class="col">
                             <label for="tname" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="tname" name="tname" required>
+                            <input type="text" class="form-control" id="tname" name="tname"   value="<?php echo htmlspecialchars($team['name']); ?>" required>
                         </div>
                     </div>
                     <div class="mb-3" align="center">

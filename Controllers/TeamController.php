@@ -1,15 +1,18 @@
 <?php
-// app/Controllers/ProjectController.php
+// app/Controllers/TeamController.php
 
 require_once 'Models/Team.php';
+require_once 'Models/Common.php';
 
 class TeamController
 {
     private $teamModel;
+    private $commonModel;
 
     public function __construct($connection)
     {
         $this->teamModel = new Team($connection);
+        $this->commonModel = new Common($connection);
     }
 
     public function handleTeamRequest()
@@ -19,104 +22,87 @@ class TeamController
             if ($type == 'status') {
                 $operation = $_GET['operation'];
                 $id = $_GET['id'];
-                if ($operation == 'active') {
-                    $status = '1';
-                } else {
-                    $status = '0';
-                }
-                $this->teamModel->updateStatus($id, $status);
-
-            }
-            // Execute the delete query
-
-            if ($type == 'delete') {
+                $status = ($operation == 'active') ? '1' : '0';
+                $this->commonModel->updateStatus($id, $status, 'teams');
+            } elseif ($type == 'delete') {
                 $id = $_GET['id'];
                 $role = $_SESSION['ROLE'];
-                // Check if the role is admin (assuming $role is defined elsewhere in your code)
-                if ($role == 1) {
-                    $data = $this->teamModel->deleteRole($id);
+                $data = ($role == 1) ? $this->commonModel->hardDelete($id, 'teams') : $this->commonModel->softDelete($id, 'teams');
 
-                    if ($data) {
-                        $_SESSION['message'] = "Team hard deleted successfully!";
-                    }
-                    // Soft delete query to update the 'deleted' column
-
-                } else {
-                    // Hard delete query to remove the task from the database
-
-                    $data = $this->teamModel->deleteByUser($id);
-
-                    if ($data) {
-                        $_SESSION['message'] = "Team soft deleted successfully!";
-                    }
-                    // $message = "Team soft deleted successfully!";
-                }
-                header("Location: team"); // Redirect to the users page
+                $_SESSION['message'] = $data ? "Team " . ($role == 1 ? "hard" : "soft") . " deleted successfully!" : "Error deleting team";
+                header("Location: team");
                 exit();
-
             }
         }
-        $result = $this->teamModel->getTeam();
+        $result = $this->commonModel->fetchAllRecords('teams');
         include 'Views/team/team.php';
     }
 
-
-    // methods for edit team data 
     public function manageTeam()
     {
-
-        $msg = "";
+        $msg = '';
         $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+        $team = $this->commonModel->getRecordById($id, 'teams');
 
         if (isset($_POST['edit'])) {
-            // Validate and sanitize user input
-            $tname = $_POST['tname'];
+            $formData = $this->getTeamFormData();
 
-            // Check if team name is not empty
-            if (!empty($tname)) {
-                // SQL query to update team name
-                $data = $this->teamModel->editTeam($id, $tname);
+            if ($formData['isValid']) {
+                $data = $this->teamModel->editTeam($id, $formData['data']['tname']);
                 if ($data) {
-                    echo '<script>alert("team updated successfully."); 
-                    window.location.replace("team");</script>';
+                    echo '<script>alert("Team updated successfully."); window.location.replace("team");</script>';
                     exit();
                 } else {
-                    $msg = "Failed to update user. Please try again.";
+                    $msg = "Failed to update team. Please try again.";
                 }
             } else {
-                $msg = "Please fill in all fields.";
+                $msg = $formData['msg'];
             }
         }
 
         include 'Views/team/manage_team.php';
     }
 
-    //add team methods
-
     public function addTeam()
     {
-        $msg = "";
+        $msg = '';
 
         if (isset($_POST['add'])) {
+            $formData = $this->getTeamFormData();
 
-            // Fetch $_POST values
-            $tname = trim($_POST['tname']);
-
-            // Validate input
-            if (empty($tname)) {
-                $msg = "Please enter a valid team name.";
-            } else {
-                // Insertion query
-                $data = $this->teamModel->addTeam($tname);
+            if ($formData['isValid']) {
+                $data = $this->teamModel->addTeam($formData['data']['tname']);
                 if ($data) {
-                    echo '<script>alert("team inserted successfully."); 
-                    window.location.replace("team");</script>';
+                    echo '<script>alert("Team inserted successfully."); window.location.replace("team");</script>';
                     exit();
                 } else {
                     $msg = "Error inserting team. Please try again.";
                 }
+            } else {
+                $msg = $formData['msg'];
             }
         }
+
         include 'Views/team/add_team.php';
     }
+
+    private function getTeamFormData()
+    {
+        $tname = trim($_POST['tname'] ?? '');
+
+        if (!empty($tname)) {
+            return [
+                'isValid' => true,
+                'data' => [
+                    'tname' => $tname
+                ]
+            ];
+        } else {
+            return [
+                'isValid' => false,
+                'msg' => "Please enter a valid team name."
+            ];
+        }
+    }
 }
+?>

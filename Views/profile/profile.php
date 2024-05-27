@@ -20,46 +20,42 @@
         <div class="card card-login mx-auto mt-5">
             <div class="card-header">Update Profile</div>
             <div class="card-body">
-                <form id="registrationForm" method="post" action="/update_profile" name="employeeForm">
+                <form id="registrationForm" method="post" action="" name="employeeForm">
                     <div class="row mb-3">
                         <div class="col">
                             <label for="fname" class="form-label">First Name</label>
                             <input type="text" class="form-control" id="fname" name="fname"
-                                value="<?php echo htmlspecialchars($user['firstname']); ?>" required>
+                                value="<?php echo $user['firstname']; ?>" required>
                         </div>
                         <div class="col">
                             <label for="mname" class="form-label">Middle Name</label>
                             <input type="text" class="form-control" id="mname" name="mname"
-                                value="<?php echo htmlspecialchars($user['middlename']); ?>" required>
+                                value="<?php echo $user['middlename']; ?>" required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col">
                             <label for="lname" class="form-label">Last Name</label>
                             <input type="text" class="form-control" id="lname" name="lname"
-                                value="<?php echo htmlspecialchars($user['lastname']); ?>" required>
+                                value="<?php echo $user['lastname']; ?>" required>
                         </div>
                         <div class="col">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" required>
+                            <input type="password" class="form-control" id="password" name="password"
+                                value="<?php echo $user['pass']; ?>" required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col">
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control" id="email" name="email"
-                                value="<?php echo htmlspecialchars($user['email']); ?>" required>
+                                value="<?php echo $user['email']; ?>" required>
                         </div>
                     </div>
-                    <div class="mb-3 text-center">
+                    <div class="mb-3" align="center">
                         <input type="submit" name="update" id="update" value="Update" class="btn btn-primary">
                     </div>
-                    <?php if (!empty($msg)): ?>
-                        <div class="text-center" style="color: red;"><?php echo htmlspecialchars($msg); ?></div>
-                    <?php endif; ?>
-                    <?php if (!empty($success_msg)): ?>
-                        <div class="text-center" style="color: green;"><?php echo htmlspecialchars($success_msg); ?></div>
-                    <?php endif; ?>
+                    <div style="color: red;"><?php echo $msg; ?></div>
                 </form>
             </div>
         </div>

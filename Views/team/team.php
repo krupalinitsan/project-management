@@ -50,8 +50,7 @@ include ("Views/header.php");
                                 </td>
 
                                 <td>
-                                    <a href='manage_team?id=<?php echo $row['id']; ?>' class='btn btn-info btn-sm'
-                                        onclick='return confirmEdit()'>Edit</a>
+                                    <a href='manage_team?id=<?php echo $row['id']; ?>' class='btn btn-info btn-sm'>Edit</a>
                                     <a href='?type=delete&id=<?php echo $row['id']; ?>' class='btn btn-danger btn-sm'
                                         onclick='return confirmDelete()'>Delete</a>
                                 </td>
@@ -68,12 +67,8 @@ include ("Views/header.php");
 </div>
 <!-- /.container-fluid -->
 <script>
-    function confirmEdit() {
-        return confirm('Are you sure you want to edit this user?');
-    }
-
     function confirmDelete() {
-        return confirm('Are you sure you want to delete this user? This action cannot be undone.');
+        return confirm('Are you sure you want to delete this team? This action cannot be undone.');
     }
 </script>
 
