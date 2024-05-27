@@ -42,6 +42,8 @@
                             <input type="text" class="form-control" id="lname" name="lname"
                                 value="<?php echo isset($user['lastname']) ? $user['lastname'] : ''; ?>" required>
                         </div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col">
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control" id="email" name="email"
@@ -58,6 +60,8 @@
                                 } ?>
                             </select>
                         </div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col">
                             <label for="team" class="form-label">Select Team</label>
                             <select id="team" name="team" class="form-control" required>
