@@ -22,14 +22,18 @@ include('Views/header.php');
             <div class="card-body">
                 <div style="color: red;"><?php echo $msg; ?></div>
                 <form id="registrationForm" method="post" name="projectForm" onsubmit="return validateForm()">
-                    <div class="row mb-3">
+                   <div class="row mb-3">
                         <div class="col">
                             <label for="pname" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="pname" name="pname" value="<?php echo htmlspecialchars($task_data['name']); ?>" required>
+                            <input type="text" class="form-control" id="pname" name="pname"
+                                value="<?php echo htmlspecialchars($task_data['name']); ?>" required>
                         </div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col">
                             <label for="desc" class="form-label">Description</label>
-                            <textarea class="form-control" id="desc" name="desc" required><?php echo htmlspecialchars($task_data['description']); ?></textarea>
+                            <textarea class="form-control" id="desc" name="desc"
+                                required><?php echo htmlspecialchars($task_data['description']); ?></textarea>
                         </div>
                     </div>
                     <div class="row mb-3">
