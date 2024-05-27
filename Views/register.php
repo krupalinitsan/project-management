@@ -24,12 +24,14 @@
             <div class="card-body">
                 <form id="registrationForm" method="post" action="" name="employeeForm"
                     onsubmit="return validateForm()">
-                    <div class="row mb-3">
+                     <div class="row mb-3">
                         <div class="col">
                             <label for="fname" class="form-label">First Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="fname" name="fname" required>
                             <span class="error text-danger" id="fnameError"></span>
                         </div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col">
                             <label for="mname" class="form-label">Middle Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="mname" name="mname" required>
@@ -42,6 +44,8 @@
                             <input type="text" class="form-control" id="lname" name="lname" required>
                             <span class="error text-danger" id="lnameError"></span>
                         </div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col">
                             <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
                             <input type="password" class="form-control" id="password" name="password" required>
