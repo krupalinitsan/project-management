@@ -28,9 +28,12 @@
                             <input type="text" class="form-control" id="pname" name="pname"
                                 value="<?php echo htmlspecialchars($project['name']); ?>" required>
                         </div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col">
                             <label for="desc" class="form-label">Description</label>
-                            <textarea class="form-control" id="desc" name="desc" required><?php echo htmlspecialchars($project['description']); ?></textarea>
+                            <textarea class="form-control" id="desc" name="desc"
+                                required><?php echo htmlspecialchars($project['description']); ?></textarea>
                         </div>
                     </div>
                     <div class="row mb-3">
