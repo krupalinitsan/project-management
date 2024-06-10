@@ -2,14 +2,16 @@
 
 require_once 'Models/User.php';
 
-class LoginController
+class LoginController extends Controller
 {
-    private $userModel;
+    protected $ad_model;
 
     public function __construct($connection)
     {
-        $this->userModel = new User($connection);
+        $this->ad_model = $this->model('user')($connection);
+
     }
+
 
     public function login()
     {

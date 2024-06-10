@@ -9,126 +9,42 @@ require 'Controllers/TaskController.php';
 require 'Controllers/ProfileController.php';
 require 'Controllers/TeamController.php';
 
-
 session_start();
-$id = $_SESSION['ID'];
+$id = $_SESSION['ID'] ?? null;
 
 if (isset($_SERVER['PATH_INFO'])) {
-    switch ($_SERVER['PATH_INFO']) {
+    $path = $_SERVER['PATH_INFO'];
+
+    match ($path) {
         //login case
-        case '/':
-        case '/login':
-            $loginController = new LoginController($connection);
-            $loginController->login();
-            break;
-        case '/register':
-            $loginController = new LoginController($connection);
-            $loginController->register();
-            break;
-        case '/resetpassword':
-            $loginController = new LoginController($connection);
-            $loginController->resetPassword();
-            break;
-        case '/dashboard';
-            include_once 'Views/dashboard.php';
-            break;
-        case '/logout';
-            include_once 'Views/logout.php';
-            break;
-
+        '/', '/login' => (new LoginController($connection))->login(),
+        '/register' => (new LoginController($connection))->register(),
+        '/resetpassword' => (new LoginController($connection))->resetPassword(),
+        '/dashboard' => include_once 'Views/dashboard.php',
+        '/logout' => include_once 'Views/logout.php',
         // routes for project crud operation
-        case '/project';
-            $projectController = new ProjectController($connection);
-            $projectController->handleRequest();
-            break;
-        case '/add_projects';
-            $projectController = new ProjectController($connection);
-            $projectController->addProject();
-            break;
-        case '/manage_project';
-            if (isset($_GET['id'])) {
-                $projectController = new ProjectController($connection);
-                $projectController->manageProject($_GET['id']);
-            } else {
-                echo "Project ID is required.";
-            }
-            break;
-
-        //routes for user crud opeartions
-        case '/users';
-            $usercontroller = new UserController($connection);
-            $usercontroller->handleUserRequest();
-            break;
-
-        case '/add_user';
-            $usercontroller = new UserController($connection);
-            $usercontroller->addUser();
-            break;
-        case '/manage_user';
-            if (isset($_GET['id'])) {
-                $usercontroller = new UserController($connection);
-                $usercontroller->editUser($_GET['id']);
-            } else {
-                echo "user ID is required.";
-            }
-            break;
-
+        '/project' => (new ProjectController($connection))->handleRequest(),
+        '/add_projects' => (new ProjectController($connection))->addProject(),
+        '/manage_project' => isset($_GET['id']) ? (new ProjectController($connection))->manageProject($_GET['id']) : print "Project ID is required.",
+        //routes for user crud operations
+        '/users' => (new UserController($connection))->handleUserRequest(),
+        '/add_user' => (new UserController($connection))->addUser(),
+        '/manage_user' => isset($_GET['id']) ? (new UserController($connection))->editUser($_GET['id']) : print "User ID is required.",
         //routes for User dashboard activity
-        case '/usertask';
-            $taskcontroller = new TaskController($connection);
-            $taskcontroller->updateStatus();
-            break;
-        case '/usercalander';
-            $taskcontroller = new TaskController($connection);
-            $taskcontroller->calanderTask();
-            break;
+        '/usertask' => (new TaskController($connection))->updateStatus(),
+        '/usercalander' => (new TaskController($connection))->calanderTask(),
+        //routes for task crud operation
+        '/task' => (new TaskController($connection))->handleTaskRequest(),
+        '/manage_task' => isset($_GET['id']) ? (new TaskController($connection))->editTask($_GET['id']) : null,
+        '/add_task' => (new TaskController($connection))->addTask(),
+        //route for profile o my Account
+        '/profile' => (new ProfileController($connection))->handleProfile($id),
+        //routes for team crud operation
+        '/team' => (new TeamController($connection))->handleTeamRequest(),
+        '/manage_team' => isset($_GET['id']) ? (new TeamController($connection))->manageTeam() : null,
+        '/add_team' => (new TeamController($connection))->addTeam(),
+        '/admin_dashboard' => (new ProjectController($connection))->fetchProject(),
 
-        //routes for task crud opeartion 
-        case '/task';
-            $taskcontroller = new TaskController($connection);
-            $taskcontroller->handleTaskRequest();
-            break;
-        case '/manage_task';
-            if (isset($_GET['id'])) {
-                $taskcontroller = new TaskController($connection);
-                $taskcontroller->editTask($_GET['id']);
-            }
-            break;
-        case '/add_task';
-            $taskcontroller = new TaskController($connection);
-            $taskcontroller->addTask();
-            break;
-
-        //route for profile o my Account 
-        case '/profile':
-            $profileController = new ProfileController($connection);
-            $profileController->handleProfile($id);
-            break;
-
-        //routes for team crud opeartion 
-        case '/team':
-            $teamController = new TeamController($connection);
-            $teamController->handleTeamRequest();
-            break;
-        case '/manage_team';
-            if (isset($_GET['id'])) {
-                $teamController = new TeamController($connection);
-                $teamController->manageTeam();
-            }
-            break;
-        case '/add_team';
-            $teamController = new TeamController($connection);
-            $teamController->addTeam();
-            break;
-        case '/admin_dashboard';
-            $projectController = new ProjectController($connection);
-            $projectController->fetchProject();
-            break;
-        default:
-            // Handle 404 error
-            echo "404 Not Found";
-            break;
-    }
-
+    };
 }
 ?>

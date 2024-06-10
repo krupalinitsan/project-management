@@ -15,9 +15,16 @@ class Employee extends Common
 
     //method for update user
 
+    // public function getUserById($id)
+    // {
+    //     $sql = "SELECT * FROM users WHERE id = $id";
+    //     return $this->connection->query($sql)->fetch_assoc();
+    // }
     public function getUserById($id)
     {
-        $sql = "SELECT * FROM users WHERE id = $id";
+        $sql = "SELECT * FROM users 
+    INNER JOIN projects ON users.id = projects.id 
+    WHERE users.id = $id";
         return $this->connection->query($sql)->fetch_assoc();
     }
     public function updateUser($id, $fname, $mname, $lname, $email, $role, $team)
